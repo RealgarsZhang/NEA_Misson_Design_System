@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 public class CSCI3170Proj {
   // Prob: insertion of new craft; lots of foreign keys to take care of.
 	//public static String dbAddress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2312/db026";
-	public static String dbAddress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2312/db023";
+	public static String dbAddress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2312/db23";
 	public static String dbUsername = "Group23";
 	//public static String dbPassword = "vmh5mf83";
   public static String dbPassword = "223092870";
@@ -31,8 +31,8 @@ public class CSCI3170Proj {
 		NEASQL += "Family VARCHAR(6) NOT NULL,";
 		NEASQL += "Duration INT NOT NULL,";
 		NEASQL += "Energy DOUBLE PRECISION NOT NULL,";
-		NEASQL += "CHECK (Distance>0)";
-		NEASQL += "CHECK (Duration BETWEEN 1 AND 999)";
+		NEASQL += "CHECK (Distance>0),";
+		NEASQL += "CHECK (Duration BETWEEN 1 AND 999),";
 		NEASQL += "CHECK (Energy>0) )";
 
 
@@ -84,8 +84,9 @@ public class CSCI3170Proj {
 		RentalRecordSQL += "CHECK (SNum BETWEEN 1 AND 99) )";
 
 		String ContainSQL = "CREATE TABLE Contain (";
-		ContainSQL += "NID INT PRIMARY KEY,";
-		ContainSQL += "Rtype VARCHAR(2),";
+		ContainSQL += "NID VARCHAR(10) NOT NULL,";
+		ContainSQL += "Rtype VARCHAR(2) NOT NULL,";
+                ContainSQL += "PRIMARY KEY (NID),";
 		ContainSQL += "FOREIGN KEY (NID) REFERENCES NEA(NID), ";
 		ContainSQL += "FOREIGN KEY (Rtype) REFERENCES Resource(Rtype) )";
 
@@ -177,8 +178,8 @@ public class CSCI3170Proj {
 		String Spacecraft_ModelSQL = "INSERT INTO Spacecraft_Model(Agency, MID, Num, Charge, Duration, Energy) VALUES(?,?,?,?,?,?)";
 		String A_ModelSQL = "INSERT INTO A_Model(Agency, MID, Num, Charge, Duration, Energy, Capacity) VALUES(?,?,?,?,?,?,?)";
 		String ResourceSQL = "INSERT INTO Resource(Rtype, Density, Value) VALUES(?,?,?)";
-		String RentalRecordSQL = "INSERT INTO RentalRecord(Agency, MID, SNum, CheckoutDate, ReturnDate) VALUES(?,?,?,?,?)"
-    String ContainSQL = "INSERT INTO Contain(NID, Rtype) VALUES(?,?)"
+		String RentalRecordSQL = "INSERT INTO RentalRecord(Agency, MID, SNum, CheckoutDate, ReturnDate) VALUES(?,?,?,?,?)";
+    String ContainSQL = "INSERT INTO Contain(NID, Rtype) VALUES(?,?)";
 		/*
 		String categorySQL = "INSERT INTO category (c_id, c_name) VALUES (?,?)";
 		String manufacturerSQL = "INSERT INTO manufacturer (m_id, m_name, m_addr, m_phone) VALUES (?,?,?,?)";
@@ -308,6 +309,8 @@ public class CSCI3170Proj {
 			//SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hh.mm.ss");
 			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 			String line = null;
+                        java.util.Date utilDate = null;
+                        java.sql.Date sqlDate = null;
 			BufferedReader dataReader = new BufferedReader(new FileReader(filePath+"/Spacecraft Rental Records.txt"));
 
 			line = dataReader.readLine();
@@ -316,13 +319,19 @@ public class CSCI3170Proj {
 				stmt.setString( 1, dataFields[0] );
 				stmt.setString( 2, dataFields[1] );
 				stmt.setInt( 3, Integer.parseInt(dataFields[2]) );
-				Date d = formatter.parse(dataFields[3]);
-				stmt.setDate( 4, d );
-				if(dataFields[4].equals('null')){
-					stmt.setNull( 5, Types.DATE );
-				}else{
-					Date d = formatter.parse(dataFields[4]);
-					stmt.setDate( 5, d );
+				utilDate = formatter.parse(dataFields[3]);
+                                sqlDate = new java.sql.Date(utilDate.getTime());
+				stmt.setDate( 4, sqlDate );
+                                utilDate = null;
+                                sqlDate = null;
+				if(dataFields[4].equals("null")){
+					stmt.setNull( 5, java.sql.Types.DATE );
+				}else{  
+                                        utilDate = formatter.parse(dataFields[4]);
+                                        sqlDate = new java.sql.Date(utilDate.getTime());
+					stmt.setDate( 5, sqlDate );
+                                        sqlDate = null;
+                                        utilDate = null;
 				}
 				stmt.addBatch();
 			}
@@ -457,8 +466,8 @@ public class CSCI3170Proj {
 		}
 		rs.close();
 		stmt.close();
-		}
-	}
+      }
+
 
 	public static void showTables(Scanner menuAns, Connection mySQLDB) throws SQLException{
 		String[] table_name = {"NEA", "Contain", "Spacecraft_Model", "A_Model", "Resource", "RentalRecord"};
