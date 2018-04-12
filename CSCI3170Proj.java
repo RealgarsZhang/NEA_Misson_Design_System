@@ -195,6 +195,7 @@ public class CSCI3170Proj {
 			System.out.print("Type in the Source Data Folder Path: ");
 			filePath = menuAns.nextLine();
 			if((new File(filePath)).isDirectory()) break;
+                        System.out.println("Invalid folder path. Try again.");
 		}
 
 		System.out.print("Processing...");
@@ -457,16 +458,20 @@ public class CSCI3170Proj {
   public static void printNEA(Scanner menuAns, Connection mySQLDB) throws SQLException{
 
 	  Statement stmt  = mySQLDB.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM NEA");
+		ResultSet rs = stmt.executeQuery("SELECT * FROM NEA");
+//    for (int i=1;i<=5;i++)
+ //   { System.out.print(rs.getString(i)+" ");}
+   // System.out.println();
     while(rs.next()){
-			for(int i = 1 ; i <= 5; i++){
-      System.out.print(rs.getString(i) + " "); //Print one element of a row
-      }
-			System.out.println();
-		}
+      for (int i=1; i<=5;i++){
+        System.out.print(rs.getString(i)+" ");
+      } 
+      System.out.println();
+		
+    }
 		rs.close();
 		stmt.close();
-      }
+  }
 
 
 	public static void showTables(Scanner menuAns, Connection mySQLDB) throws SQLException{
@@ -481,6 +486,7 @@ public class CSCI3170Proj {
 			rs.close();
 			stmt.close();
 		}
+                printNEA(menuAns, mySQLDB);
 	}
 
 
@@ -512,7 +518,10 @@ public class CSCI3170Proj {
 			loadTables(menuAns, mySQLDB);
 		}else if(answer.equals("4")){
 			showTables(menuAns, mySQLDB);
-		}
+		}else if(answer.equals("5")){
+                        return;
+                }
+                adminMenu(menuAns,mySQLDB);
 	}
 
 	public static void searchParts(Scanner menuAns, Connection mySQLDB) throws SQLException{
