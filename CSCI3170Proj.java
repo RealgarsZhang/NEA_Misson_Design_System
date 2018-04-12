@@ -190,6 +190,12 @@ public class CSCI3170Proj {
 		String filePath = "";
 		String targetTable = "";
 
+		DatabaseMetaData dbm = mySQLDB.getMetaData();
+    ResultSet tables = dbm.getTables(null, null, "NEA", null);
+    if (!tables.next()) {
+      System.out.println("The tables have not been created yet. Create the table first!");
+			return;
+    }
 		while(true){
 			System.out.println("");
 			System.out.print("Type in the Source Data Folder Path: ");
@@ -327,7 +333,7 @@ public class CSCI3170Proj {
                                 sqlDate = null;
 				if(dataFields[4].equals("null")){
 					stmt.setNull( 5, java.sql.Types.DATE );
-				}else{  
+				}else{
                                         utilDate = formatter.parse(dataFields[4]);
                                         sqlDate = new java.sql.Date(utilDate.getTime());
 					stmt.setDate( 5, sqlDate );
@@ -465,17 +471,88 @@ public class CSCI3170Proj {
     while(rs.next()){
       for (int i=1; i<=5;i++){
         System.out.print(rs.getString(i)+" ");
-      } 
+      }
       System.out.println();
-		
     }
 		rs.close();
 		stmt.close();
   }
 
+	public static void printRentalRecord(Scanner menuAns, Connection mySQLDB) throws SQLException{
+
+		Statement stmt  = mySQLDB.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM RentalRecord");
+		while(rs.next()){
+      for (int i=1; i<=5;i++){
+        System.out.print(rs.getString(i)+" ");
+      }
+      System.out.println();
+    }
+		rs.close();
+		stmt.close();
+	}
+
+	public static void printA_Model(Scanner menuAns, Connection mySQLDB) throws SQLException{
+		Statement stmt  = mySQLDB.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM A_Model");
+		while(rs.next()){
+			for (int i=1; i<=7;i++){
+				System.out.print(rs.getString(i)+" ");
+			}
+			System.out.println();
+		}
+		rs.close();
+		stmt.close();
+	}
+
+ public static void printSpacecraft_Model(Scanner menuAns, Connection mySQLDB) throws SQLException{
+		Statement stmt  = mySQLDB.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM Spacecraft_Model");
+		while(rs.next()){
+			for (int i=1; i<=6;i++){
+				System.out.print(rs.getString(i)+" ");
+			}
+			System.out.println();
+		}
+		rs.close();
+		stmt.close();
+	}
+
+	public static void printResource(Scanner menuAns, Connection mySQLDB) throws SQLException{
+		Statement stmt  = mySQLDB.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM Resource");
+		while(rs.next()){
+			for (int i=1; i<=3;i++){
+				System.out.print(rs.getString(i)+" ");
+			}
+			System.out.println();
+		}
+		rs.close();
+		stmt.close();
+	}
+
+	public static void printContain(Scanner menuAns, Connection mySQLDB) throws SQLException{
+		Statement stmt  = mySQLDB.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM Contain");
+		while(rs.next()){
+			for (int i=1; i<=2;i++){
+				System.out.print(rs.getString(i)+" ");
+			}
+			System.out.println();
+		}
+		rs.close();
+		stmt.close();
+	}
 
 	public static void showTables(Scanner menuAns, Connection mySQLDB) throws SQLException{
 		String[] table_name = {"NEA", "Contain", "Spacecraft_Model", "A_Model", "Resource", "RentalRecord"};
+
+		DatabaseMetaData dbm = mySQLDB.getMetaData();
+    ResultSet tables = dbm.getTables(null, null, "NEA", null);
+    if (!tables.next()) {
+      System.out.println("The tables have not been created yet. Create the table first!");
+			return;
+    }
 
 		System.out.println("Number of records in each table:");
 		for (int i = 0; i < 6; i++){
