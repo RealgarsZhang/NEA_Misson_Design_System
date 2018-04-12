@@ -563,7 +563,7 @@ public class CSCI3170Proj {
 			rs.close();
 			stmt.close();
 		}
-                printNEA(menuAns, mySQLDB);
+                printRentalRecord(menuAns, mySQLDB);
 	}
 
 
