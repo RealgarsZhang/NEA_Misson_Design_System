@@ -578,11 +578,11 @@ public class CSCI3170Proj {
 			System.out.println("2. Delete all tables");
 			System.out.println("3. Load data from a dataset");
 			System.out.println("4. Show number of records in each table");
-			System.out.println("5. Return to the main menu");
+			System.out.println("0. Return to the main menu");
 			System.out.print("Enter Your Choice: ");
 			answer = menuAns.nextLine();
 
-			if(answer.equals("1")||answer.equals("2")||answer.equals("3")||answer.equals("4")||answer.equals("5"))
+			if(answer.equals("1")||answer.equals("2")||answer.equals("3")||answer.equals("4")||answer.equals("0"))
 				break;
 			System.out.println("[Error]: Wrong Input, Type in again!!!");
 		}
@@ -595,7 +595,7 @@ public class CSCI3170Proj {
 			loadTables(menuAns, mySQLDB);
 		}else if(answer.equals("4")){
 			showTables(menuAns, mySQLDB);
-		}else if(answer.equals("5")){
+		}else if(answer.equals("0")){
                         return;
                 }
                 adminMenu(menuAns,mySQLDB);
@@ -869,7 +869,7 @@ public class CSCI3170Proj {
 				System.out.println("1. Operations for administrator");
 				System.out.println("2. Operations for exploration companies (rential customers)");
 				System.out.println("3. Operations for spacecraft rental staff");
-				System.out.println("4. Exit this program");
+				System.out.println("0. Exit this program");
 				System.out.print("Enter Your Choice: ");
 
 				String answer = menuAns.nextLine();
@@ -880,7 +880,7 @@ public class CSCI3170Proj {
 					staffMenu(menuAns, mySQLDB);
 				}else if(answer.equals("3")){
 					managerMenu(menuAns, mySQLDB);
-				}else if(answer.equals("4")){
+				}else if(answer.equals("0")){
 					break;
 				}else{
 					System.out.println("[Error]: Wrong Input, Type in again!!!");
