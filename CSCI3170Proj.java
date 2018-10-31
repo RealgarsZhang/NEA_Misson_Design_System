@@ -90,48 +90,6 @@ public class CSCI3170Proj {
 		ContainSQL += "FOREIGN KEY (NID) REFERENCES NEA(NID), ";
 		ContainSQL += "FOREIGN KEY (Rtype) REFERENCES Resource(Rtype) )";
 
-
-    /*
-		manufacturerSQL += "m_name VARCHAR(20) NOT NULL,";
-		manufacturerSQL += "m_addr VARCHAR(50) NOT NULL,";
-		manufacturerSQL += "m_phone INT NOT NULL,";
-		manufacturerSQL += "CHECK (m_id BETWEEN 1 AND 99),";
-		manufacturerSQL += "CHECK (m_phone BETWEEN 10000000 AND 99999999))";
-
-		String salespersonSQL = "CREATE TABLE salesperson (";
-		salespersonSQL += "s_id INT PRIMARY KEY NOT NULL,";
-		salespersonSQL += "s_name VARCHAR(20) NOT NULL,";
-		salespersonSQL += "s_addr VARCHAR(50) NOT NULL,";
-		salespersonSQL += "s_phone INT NOT NULL,";
-		salespersonSQL += "s_experience INT NOT NULL,";
-		salespersonSQL += "CHECK (s_id BETWEEN 1 AND 99),";
-		salespersonSQL += "CHECK (s_phone BETWEEN 10000000 AND 99999999),";
-		salespersonSQL += "CHECK (s_experience BETWEEN 1 AND 9))";
-
-		String partSQL = "CREATE TABLE part (";
-		partSQL += "p_id INT PRIMARY KEY NOT NULL,";
-		partSQL += "p_name VARCHAR(20) NOT NULL,";
-		partSQL += "p_price INT NOT NULL,";
-		partSQL += "m_id INT NOT NULL,";
-		partSQL += "c_id INT NOT NULL,";
-		partSQL += "p_quantity INT NOT NULL,";
-		partSQL += "p_warranty INT NOT NULL,";
-		partSQL += "FOREIGN KEY (m_id) REFERENCES manufacturer(m_id),";
-		partSQL += "FOREIGN KEY (c_id) REFERENCES category(c_id),";
-		partSQL += "CHECK (p_id BETWEEN 1 AND 999),";
-		partSQL += "CHECK (p_price BETWEEN 1 AND 99999),";
-		partSQL += "CHECK (p_warranty BETWEEN 1 AND 99),";
-		partSQL += "CHECK (p_quantity BETWEEN 0 AND 99))";
-
-		String transactionSQL = "CREATE TABLE transaction (";
-		transactionSQL += "t_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,";
-		transactionSQL += "p_id INT NOT NULL,";
-		transactionSQL += "s_id INT NOT NULL,";
-		transactionSQL += "t_date DATE NOT NULL,";
-		transactionSQL += "FOREIGN KEY (p_id) REFERENCES part(p_id),";
-		transactionSQL += "FOREIGN KEY (s_id) REFERENCES salesperson(s_id),";
-		transactionSQL += "CHECK (t_id BETWEEN 1 AND 9999))";
-    */
 		Statement stmt  = mySQLDB.createStatement();
 		System.out.print("Processing...");
 
@@ -180,13 +138,7 @@ public class CSCI3170Proj {
 		String ResourceSQL = "INSERT INTO Resource(Rtype, Density, Value) VALUES(?,?,?)";
 		String RentalRecordSQL = "INSERT INTO RentalRecord(Agency, MID, SNum, CheckoutDate, ReturnDate) VALUES(?,?,?,?,?)";
     String ContainSQL = "INSERT INTO Contain(NID, Rtype) VALUES(?,?)";
-		/*
-		String categorySQL = "INSERT INTO category (c_id, c_name) VALUES (?,?)";
-		String manufacturerSQL = "INSERT INTO manufacturer (m_id, m_name, m_addr, m_phone) VALUES (?,?,?,?)";
-		String partSQL = "INSERT INTO part (p_id, p_name, p_price, m_id, c_id, p_warranty, p_quantity) VALUES (?,?,?,?,?,?,?)";
-		String salespersonSQL = "INSERT INTO salesperson (s_id, s_name, s_addr, s_phone, s_experience) VALUES (?,?,?,?,?)";
-		String transactionSQL = "INSERT INTO transaction (t_id, p_id, s_id, t_date) VALUES (?,?,?,STR_TO_DATE(?,'%d/%m/%Y'))";
-    */
+
 		String filePath = "";
 		String targetTable = "";
 
@@ -347,116 +299,6 @@ public class CSCI3170Proj {
 		}catch (Exception e){
 			System.out.println(e);
 		}
-
-
-		/*
-		//System.err.println("Loading Category");
-		try{
-			PreparedStatement stmt = mySQLDB.prepareStatement(categorySQL);
-			String line = null;
-			BufferedReader dataReader = new BufferedReader(new FileReader(filePath+"/category.txt"));
-
-			while ((line = dataReader.readLine()) != null) {
-				String[] dataFields = line.split("\t");
-				stmt.setInt(1, Integer.parseInt(dataFields[0]));
-				stmt.setString(2, dataFields[1]);
-				stmt.addBatch();
-			}
-			stmt.executeBatch();
-			stmt.close();
-		}catch (Exception e){
-			System.out.println(e);
-		}
-
-		//System.err.println("Loading Manufacturer");
-		try{
-			PreparedStatement stmt = mySQLDB.prepareStatement(manufacturerSQL);
-			String line = null;
-			BufferedReader dataReader = new BufferedReader(new FileReader(filePath+"/manufacturer.txt"));
-
-			while ((line = dataReader.readLine()) != null) {
-				String[] dataFields = line.split("\t");
-				stmt.setInt(1, Integer.parseInt(dataFields[0]));
-				stmt.setString(2, dataFields[1]);
-				stmt.setString(3, dataFields[2]);
-				stmt.setInt(4, Integer.parseInt(dataFields[3]));
-				stmt.addBatch();
-			}
-			stmt.executeBatch();
-			stmt.close();
-		}catch (Exception e){
-			System.out.println(e);
-		}
-
-		//System.err.println("Loading Part");
-		try{
-			PreparedStatement stmt = mySQLDB.prepareStatement(partSQL);
-
-			String line = null;
-			BufferedReader dataReader = new BufferedReader(new FileReader(filePath+"/part.txt"));
-
-			while ((line = dataReader.readLine()) != null) {
-				String[] dataFields = line.split("\t");
-				stmt.setInt(1, Integer.parseInt(dataFields[0]));
-				stmt.setString(2, dataFields[1]);
-				stmt.setInt(3, Integer.parseInt(dataFields[2]));
-				stmt.setInt(4, Integer.parseInt(dataFields[3]));
-				stmt.setInt(5, Integer.parseInt(dataFields[4]));
-				stmt.setInt(6, Integer.parseInt(dataFields[5]));
-				stmt.setInt(7, Integer.parseInt(dataFields[6]));
-				stmt.addBatch();
-			}
-
-			stmt.executeBatch();
-			stmt.close();
-		}catch (Exception e){
-			System.out.println(e);
-		}
-
-		//System.err.println("Loading Salesperson");
-		try{
-			PreparedStatement stmt = mySQLDB.prepareStatement(salespersonSQL);
-			String line = null;
-			BufferedReader dataReader = new BufferedReader(new FileReader(filePath+"/salesperson.txt"));
-
-			while ((line = dataReader.readLine()) != null) {
-				String[] dataFields = line.split("\t");
-				stmt.setInt(1, Integer.parseInt(dataFields[0]));
-				stmt.setString(2, dataFields[1]);
-				stmt.setString(3, dataFields[2]);
-				stmt.setInt(4, Integer.parseInt(dataFields[3]));
-				stmt.setInt(5, Integer.parseInt(dataFields[4]));
-				stmt.addBatch();
-			}
-			stmt.executeBatch();
-			stmt.close();
-		}catch (Exception e){
-			System.out.println(e);
-		}
-
-		//System.err.println("Loading Transaction");
-		try{
-			PreparedStatement stmt = mySQLDB.prepareStatement(transactionSQL);
-			String line = null;
-			BufferedReader dataReader = new BufferedReader(new FileReader(filePath+"/transaction.txt"));
-
-			while ((line = dataReader.readLine()) != null) {
-				String[] dataFields = line.split("\t");
-				stmt.setInt(1, Integer.parseInt(dataFields[0]));
-				stmt.setInt(2, Integer.parseInt(dataFields[1]));
-				stmt.setInt(3, Integer.parseInt(dataFields[2]));
-				stmt.setString(4, dataFields[3]);
-
-				//System.err.println("Record: " + i);
-				stmt.addBatch();
-				//i++;
-			}
-			stmt.executeBatch();
-			stmt.close();
-		}catch (Exception e){
-			System.out.println(e);
-		}
-		*/
 
 		System.out.println("Data successfully loaded!");
 	}
